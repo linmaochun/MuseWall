@@ -37,7 +37,7 @@
 
 | Original (原图) | Generated Wallpaper (生成效果) |
 | :---: | :---: |
-| ![Project Preview](./preview.png) | ![Project Preview](./preview.png) |
+| ![Original](./1739px-Claude_Monet_-_Woman_with_a_Parasol_-_Madame_Monet_and_Her_Son_-_Google_Art_Project.jpg) | ![Generated Wallpaper](./preview.png) |
 
 ## 🤝 Contributing (贡献)
 
