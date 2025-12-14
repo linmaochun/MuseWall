@@ -1,4 +1,4 @@
-# 🎨 MuseWall - Aesthetic Wallpaper Generator
+# 🎨 ArtFrame - Aesthetic Wallpaper Generator
 
 > Turn your photos into museum-quality wallpapers with a single click.
 > 一键将照片转化为艺术馆级的高质感壁纸。
