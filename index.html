@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>极致力配套壁纸生成器 (1:1对齐版)</title>
+    <title>ArtFrame 极致壁纸生成器 (1:1完美对齐版)</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #1a1a1a;
+            background-color: #0a0a0a;
             color: #e0e0e0;
             display: flex;
             flex-direction: column;
@@ -18,10 +18,11 @@
         h2 {
             margin-top: 0;
             font-weight: 300;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             text-align: center;
             color: #fff;
-            opacity: 0.9;
+            opacity: 0.95;
+            margin-bottom: 30px;
         }
         .main-layout {
             display: flex;
@@ -29,95 +30,103 @@
             align-items: flex-start;
             flex-wrap: wrap;
             justify-content: center;
+            width: 100%;
+            max-width: 1200px;
         }
         .controls-wrapper {
             flex: 1;
-            min-width: 320px;
+            min-width: 300px;
             max-width: 400px;
         }
         .controls {
-            background: #252525;
+            background: #1c1c1e; /* iOS 风格深色背景 */
             padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border: 1px solid #333;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            border: 1px solid #2c2c2e;
         }
         .control-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             display: flex;
             flex-direction: column;
         }
         .control-group label {
             font-size: 13px;
-            margin-bottom: 8px;
-            color: #ccc;
+            margin-bottom: 10px;
+            color: #a1a1a6;
             display: flex;
             justify-content: space-between;
             font-weight: 500;
             letter-spacing: 0.5px;
         }
         
-        /* 输入框布局 */
+        /* 双输入框布局 */
         .input-row { display: flex; gap: 10px; }
         .input-row input {
-            background: #333; border: 1px solid #444; color: #fff;
+            background: #2c2c2e; border: 1px solid #3a3a3c; color: #fff;
             padding: 10px; border-radius: 8px; width: 100%;
             text-align: center; font-size: 14px;
+            font-family: monospace;
         }
-        .input-row input:focus { outline: none; border-color: #4285f4; }
+        .input-row input:focus { outline: none; border-color: #0a84ff; }
         
         input[type="range"] {
-            width: 100%; accent-color: #4285f4; cursor: pointer;
-            height: 4px; background: #444; border-radius: 2px; outline: none;
+            width: 100%; accent-color: #0a84ff; cursor: pointer;
+            height: 4px; background: #3a3a3c; border-radius: 2px; outline: none;
         }
         
         .file-upload-label {
-            display: block; background: #333; color: #ddd;
-            text-align: center; padding: 14px; border-radius: 12px;
-            cursor: pointer; border: 2px dashed #555; transition: all 0.3s;
-            font-size: 14px;
+            display: block; background: #2c2c2e; color: #ddd;
+            text-align: center; padding: 16px; border-radius: 14px;
+            cursor: pointer; border: 2px dashed #48484a; transition: all 0.3s;
+            font-size: 14px; font-weight: 500;
         }
-        .file-upload-label:hover { background: #3c3c3c; border-color: #777; }
+        .file-upload-label:hover { background: #3a3a3c; border-color: #636366; }
         .file-upload input[type="file"] { display: none; }
 
         #preview-container {
             position: relative;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5); 
-            border-radius: 18px; overflow: hidden; font-size: 0;
+            box-shadow: 
+                0 0 0 4px #1c1c1e,
+                0 30px 60px rgba(0,0,0,0.8); 
+            border-radius: 20px; overflow: hidden; font-size: 0;
             max-height: 80vh; background: #000;
             aspect-ratio: 9 / 16; 
         }
         canvas { height: 100%; width: auto; display: block; margin: 0 auto; }
         
+        /* 按钮组样式 */
         .btn-group {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 20px;
         }
         button {
-            border: none; padding: 14px; border-radius: 12px;
-            font-size: 15px; font-weight: 500; cursor: pointer;
+            border: none; padding: 16px 10px; border-radius: 14px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
             transition: transform 0.1s, opacity 0.2s; flex: 1;
+            line-height: 1.4;
         }
         button:active { transform: scale(0.98); }
+        button span { display: block; font-size: 11px; font-weight: 400; opacity: 0.7; margin-top: 2px; }
         
-        .btn-primary { background: #4285f4; color: white; }
-        .btn-primary:hover { background: #3367d6; }
+        .btn-primary { background: linear-gradient(135deg, #0a84ff, #0056b3); color: white; }
+        .btn-primary:hover { opacity: 0.9; }
         
-        .btn-secondary { background: #3a3a3a; color: #eee; border: 1px solid #555; }
-        .btn-secondary:hover { background: #444; border-color: #777; }
+        .btn-secondary { background: #3a3a3c; color: #fff; }
+        .btn-secondary:hover { background: #48484a; }
         
         .detect-btn {
-            background: transparent; border: 1px solid #555; color: #aaa;
-            padding: 5px 10px; border-radius: 6px; font-size: 12px;
-            cursor: pointer; margin-top: 5px;
+            background: transparent; border: 1px solid #48484a; color: #a1a1a6;
+            padding: 4px 8px; border-radius: 6px; font-size: 11px;
+            cursor: pointer; margin-left: 10px;
         }
-        .detect-btn:hover { background: #444; color: #fff; }
+        .detect-btn:hover { background: #3a3a3c; color: #fff; }
     </style>
 </head>
 <body>
 
-    <h2>🎨 配套壁纸生成器 (1:1对齐版)</h2>
+    <h2>ArtFrame 壁纸生成器</h2>
 
     <div class="main-layout">
         <div class="controls-wrapper">
@@ -125,7 +134,7 @@
                 <div class="control-group">
                     <div class="file-upload">
                         <label for="uploadInput" class="file-upload-label">
-                            📁 选择图片
+                            📁 点击选择图片
                         </label>
                         <input type="file" id="uploadInput" accept="image/*">
                     </div>
@@ -133,8 +142,8 @@
 
                 <div class="control-group">
                     <label>
-                        画布尺寸 (宽 x 高)
-                        <button class="detect-btn" onclick="detectResolution()">📍 获取本机尺寸</button>
+                        分辨率 (宽 x 高)
+                        <button class="detect-btn" onclick="detectResolution()">📍 获取屏幕尺寸</button>
                     </label>
                     <div class="input-row">
                         <input type="number" id="inputWidth" value="1440">
@@ -154,7 +163,7 @@
                 </div>
 
                 <div class="control-group">
-                    <label>图片缩放 (Scale): <span id="scaleVal">82</span>%</label>
+                    <label>前景缩放 (Scale): <span id="scaleVal">82</span>%</label>
                     <input type="range" id="scaleRange" min="30" max="95" value="82">
                 </div>
 
@@ -164,13 +173,19 @@
                 </div>
                 
                 <div class="control-group">
-                    <label>圆角大小 (Radius): <span id="radiusVal">50</span>px</label>
+                    <label>卡片圆角 (Radius): <span id="radiusVal">50</span>px</label>
                     <input type="range" id="radiusRange" min="0" max="160" step="5" value="50">
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn-primary" onclick="downloadImage('full')">保存完整壁纸<br><span style="font-size:11px; opacity:0.8">(适合桌面)</span></button>
-                    <button class="btn-secondary" onclick="downloadImage('superBlur')">保存超模糊版<br><span style="font-size:11px; opacity:0.8">(适合锁屏)</span></button>
+                    <button class="btn-primary" onclick="downloadImage('full')">
+                        保存完整壁纸
+                        <span>适合桌面 (Home Screen)</span>
+                    </button>
+                    <button class="btn-secondary" onclick="downloadImage('lock')">
+                        保存全模糊版
+                        <span>适合锁屏 (Lock Screen)</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -207,10 +222,12 @@
         let originalImage = new Image();
         let isImageLoaded = false;
 
+        // 1. 自动检测分辨率
         function detectResolution() {
             const dpr = window.devicePixelRatio || 1;
             let screenW = Math.round(window.screen.width * dpr);
             let screenH = Math.round(window.screen.height * dpr);
+            // 确保是竖屏比例
             if (screenW > screenH) [screenW, screenH] = [screenH, screenW];
 
             inputs.width.value = screenW;
@@ -222,9 +239,10 @@
             
             const btn = document.querySelector('.detect-btn');
             const originalText = btn.innerText;
-            btn.innerText = `✅ ${screenW}x${screenH}`;
-            setTimeout(() => btn.innerText = originalText, 2000);
+            btn.innerText = `✅ 已应用`;
+            setTimeout(() => btn.innerText = originalText, 1500);
         }
+        // 默认执行一次
         detectResolution();
 
         function updateCanvasSize() {
@@ -237,19 +255,20 @@
 
         function drawPlaceholder() {
             updateCanvasSize();
-            ctx.fillStyle = "#202124"; 
+            ctx.fillStyle = "#1c1c1e"; 
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "#5f6368";
-            const fontSize = Math.floor(canvas.width / 20); 
-            ctx.font = `bold ${fontSize}px Google Sans, sans-serif`;
+            const fontSize = Math.floor(canvas.width / 22); 
+            ctx.font = `bold ${fontSize}px -apple-system, sans-serif`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.fillText(`预览模式`, canvas.width/2, canvas.height/2);
+            ctx.fillText(`等待上传图片`, canvas.width/2, canvas.height/2);
             ctx.font = `${fontSize * 0.7}px sans-serif`;
-            ctx.fillText("请上传图片", canvas.width/2, canvas.height/2 + fontSize * 1.5);
+            ctx.fillText("请在左侧选择文件", canvas.width/2, canvas.height/2 + fontSize * 1.5);
         }
         drawPlaceholder();
 
+        // 事件监听
         Object.values(inputs).forEach(input => {
             if(input !== inputs.upload) {
                 input.addEventListener('input', () => {
@@ -264,7 +283,7 @@
         inputs.upload.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
-            document.querySelector('.file-upload-label').innerText = "已加载: " + file.name;
+            document.querySelector('.file-upload-label').innerText = "已选择: " + file.name;
             const reader = new FileReader();
             reader.onload = function(event) {
                 originalImage.onload = function() {
@@ -302,10 +321,11 @@
             ctx.closePath();
         }
 
+        // --- 核心渲染函数：渲染完整壁纸 ---
         function render() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // 1. 背景层
+            // 1. 绘制背景 (Cover)
             ctx.save();
             const scaleBg = Math.max(canvas.width / originalImage.width, canvas.height / originalImage.height);
             const wBg = originalImage.width * scaleBg;
@@ -314,12 +334,15 @@
             const yBg = (canvas.height - hBg) / 2;
             
             const brightness = inputs.bri.value / 100;
+            // 增加一点饱和度让模糊背景不发灰
             ctx.filter = `blur(${inputs.blur.value}px) brightness(${brightness}) saturate(1.2)`; 
+            
+            // 稍微放大背景(Bleed)防止边缘模糊白边
             const bgBleed = Math.max(canvas.width, canvas.height) * 0.1; 
             ctx.drawImage(originalImage, xBg - bgBleed, yBg - bgBleed, wBg + bgBleed*2, hBg + bgBleed*2);
             ctx.restore();
 
-            // 氛围暗角
+            // 2. 绘制氛围暗角 (Vignette)
             const vignette = ctx.createRadialGradient(
                 canvas.width / 2, canvas.height / 2, canvas.width * 0.3, 
                 canvas.width / 2, canvas.height / 2, canvas.height * 0.9 
@@ -329,43 +352,44 @@
             ctx.fillStyle = vignette;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // 2. 前景计算
+            // 3. 计算前景参数
             const padding = canvas.width * 0.08; 
             const safeW = canvas.width - (padding * 2);
             const safeH = canvas.height - (padding * 2);
             let baseScale = Math.min(safeW / originalImage.width, safeH / originalImage.height);
             const finalScale = baseScale * (inputs.scale.value / 100);
+            
             const wFg = originalImage.width * finalScale;
             const hFg = originalImage.height * finalScale;
             const xFg = (canvas.width - wFg) / 2;
             const yFg = (canvas.height * (inputs.pos.value / 100)) - (hFg / 2);
             const cornerRadius = parseInt(inputs.radius.value);
 
-            // 3. 阴影
+            // 4. 绘制阴影
             ctx.save();
             drawRoundedRectPath(ctx, xFg, yFg, wFg, hFg, cornerRadius);
-            ctx.shadowColor = "rgba(0, 0, 0, 0.5)"; 
+            ctx.shadowColor = "rgba(0, 0, 0, 0.55)"; 
             ctx.shadowBlur = canvas.height * 0.04; 
             ctx.shadowOffsetY = canvas.height * 0.02; 
             ctx.fillStyle = "black"; 
             ctx.fill();
             ctx.restore();
 
-            // 4. 前景图
+            // 5. 绘制前景卡片
             ctx.save();
             drawRoundedRectPath(ctx, xFg, yFg, wFg, hFg, cornerRadius);
             ctx.clip();
-            ctx.filter = "none"; 
+            ctx.filter = "none"; // 确保前景清晰
             ctx.drawImage(originalImage, xFg, yFg, wFg, hFg);
             ctx.restore();
 
-            // 5. 描边
+            // 6. 绘制高光描边 (Rim Light)
             ctx.save();
             drawRoundedRectPath(ctx, xFg, yFg, wFg, hFg, cornerRadius);
             ctx.lineWidth = Math.max(2, canvas.width * 0.002); 
             ctx.strokeStyle = "rgba(255, 255, 255, 0.3)"; 
             ctx.stroke();
-            
+            // 内阴影
             ctx.clip();
             ctx.lineWidth = Math.max(4, canvas.width * 0.004);
             ctx.strokeStyle = "rgba(0,0,0,0.05)";
@@ -373,17 +397,18 @@
             ctx.restore();
         }
 
+        // --- 下载逻辑 ---
         function downloadImage(type) {
             if (!isImageLoaded) {
                 alert("请先选择图片"); return;
             }
             
-            const isSuperBlur = (type === 'superBlur');
-            const btn = isSuperBlur ? document.querySelector('.btn-secondary') : document.querySelector('.btn-primary');
+            const isLockScreen = (type === 'lock');
+            const btn = isLockScreen ? document.querySelector('.btn-secondary') : document.querySelector('.btn-primary');
             const originalText = btn.innerHTML;
             btn.innerText = "处理中...";
             
-            // 确保当前画布上是完整的壁纸
+            // 1. 强制渲染一次标准完整版
             render();
 
             const performDownload = (suffix) => {
@@ -391,42 +416,47 @@
                  const timestamp = new Date().getTime();
                  const w = inputs.width.value;
                  const h = inputs.height.value;
-                 link.download = `${suffix}-${w}x${h}-${timestamp}.png`;
+                 link.download = `ArtFrame-${suffix}-${w}x${h}.png`;
                  link.href = canvas.toDataURL('image/png', 1.0);
                  link.click();
             };
 
             setTimeout(() => {
-                if (isSuperBlur) {
-                    // --- 超级模糊版 (关键修复) ---
+                if (isLockScreen) {
+                    // --- 锁屏处理逻辑 (严格 1:1 对齐) ---
+                    
+                    // a. 截图当前画布
                     const snapshot = new Image();
                     snapshot.onload = function() {
+                        // b. 清空画布
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        ctx.save();
                         
-                        // 1. 设置稍微柔和一点的模糊值 (80px 就很强了)
-                        const blurAmount = 80;
-                        ctx.filter = `blur(${blurAmount}px) brightness(1.05)`; 
-                        
-                        // 2. 关键修改：计算最小出血量 (Bleed)
-                        // 之前是 10% (max width * 0.1) 导致放大了几百像素
-                        // 现在只取模糊值作为出血量，刚好盖住白边即可
-                        const bleed = blurAmount; 
+                        // c. 垫一层黑色背景 (防止边缘模糊变透)
+                        ctx.fillStyle = "#000000";
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                        // 3. 绘制时，只向外扩展极小的像素
-                        ctx.drawImage(snapshot, -bleed, -bleed, canvas.width + bleed*2, canvas.height + bleed*2);
+                        // d. 原位绘制 + 强力模糊
+                        ctx.save();
+                        // 稍微提亮一点，抵消黑色背景带来的变暗
+                        ctx.filter = 'blur(60px) brightness(1.1)'; 
+                        
+                        // 【关键】 0, 0 原位绘制，坚决不缩放
+                        ctx.drawImage(snapshot, 0, 0, canvas.width, canvas.height);
+                        
                         ctx.restore();
                         
-                        performDownload('LockScreen-Blur');
+                        // e. 下载
+                        performDownload('LockScreen');
                         
-                        render(); // 恢复预览
+                        // f. 恢复预览
+                        render();
                         btn.innerHTML = originalText;
                     };
                     snapshot.src = canvas.toDataURL();
                     
                 } else {
-                    // --- 完整版 ---
-                    performDownload('Desktop-Full');
+                    // --- 桌面处理逻辑 ---
+                    performDownload('Desktop');
                     btn.innerHTML = originalText;
                 }
             }, 50);
